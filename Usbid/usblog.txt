@@ -1,0 +1,2 @@
+*** Vendor ID : Device ID ***
+0x1210 : 0x25f4
