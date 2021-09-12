@@ -6,6 +6,7 @@
 * **ft_printf** - reimplementation of the standard C *printf* function.
 * **Get_next_line** - function returning a terminated line read from a file descriptor.
 * **Libft** - reimplementation of standard C library functions.
+* **Minishell** - reimplementation of some Bash functions.
 * **Philosophers** - dining philosophers problem implemented on C.
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
