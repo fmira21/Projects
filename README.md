@@ -9,6 +9,10 @@
 * **Minishell** - reimplementation of some Bash functions.
 * **Philosophers** - dining philosophers problem implemented on C.
 
+![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
+
+* **C++ Modules** - Exercises dedicated to 8 basic C++ topics.
+
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
 * **Mailcheck** - a function for validation of an entered e-mail address. 
