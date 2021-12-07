@@ -1,19 +1,28 @@
 import usb.core
 
-#Создание нового журнала со всеми подключенными девайсами
+# Create new log with all connected devices
 def new_log():
-    dev = usb.core.find(find_all=1)
-    fname = input ('Введите имя нового журнала: ')
+    try:
+        dev = usb.core.find(find_all=1)
+    except:
+        print ("USB устройств не обнаружено.\nNo USB devices detected.")
+        return
+    fname = input ('Введите имя нового журнала:\nEnter new log name:')
     log = open(fname, "w")
     for cfg in dev:
         if str(cfg.idProduct) != '1' and str(cfg.idProduct) != '2':
             log.write(str(hex(cfg.idVendor)) + ' : ' + str(hex(cfg.idProduct)) + '\n')
     log.close()
     print ('Сохранено в', fname)
+    print ('Saved as', fname)
 
-#Запись подключенных девайсов в общий журнал
+# Add connected devices to the usblog.txt
 def accept():
-    dev = usb.core.find(find_all=1)
+    try:
+        dev = usb.core.find(find_all=1)
+    except:
+        print ("USB устройств не обнаружено.\nNo USB devices detected.")
+        return
     acc = open("usblog.txt", "a")
     for cfg in dev:
         entry = str(hex(cfg.idVendor)) + ' : ' + str(hex(cfg.idProduct))
@@ -22,26 +31,34 @@ def accept():
                 acc.write(str(hex(cfg.idVendor)) + ' : ' + str(hex(cfg.idProduct)) + '\n')
     acc.close()
 
-#Отображение найденных устройств в консоли
+# Show the found devices in the terminal
 def show():
-    dev = usb.core.find(find_all=1)
+    try:
+        dev = usb.core.find(find_all=1)
+    except:
+        print ("USB устройств не обнаружено.\nNo USB devices detected.")
+        return
     for cfg in dev:
         if str(cfg.idProduct) != '1' and str(cfg.idProduct) != '2':
-            print ('ID производителя:' + str(hex(cfg.idVendor)) + ' ID устройства:' + str(hex(cfg.idProduct)) + '\n')
+            print ('ID производителя (Vendor ID):' + str(hex(cfg.idVendor)) + ' ID устройства (Product ID):' + str(hex(cfg.idProduct)) + '\n')
 
-#Проверка, внесена ли флешка в журнал
+# Check if a connected device is in the log
 def check():
-    dev = usb.core.find(find_all=1)
+    try:
+        dev = usb.core.find(find_all=1)
+    except:
+        print ("USB устройств не обнаружено.\nNo USB devices detected.")
+        return
     for cfg in dev:
         if str(cfg.idProduct) != '1' and str(cfg.idProduct) != '2':
             line = str(hex(cfg.idVendor)) + ' : ' + str(hex(cfg.idProduct))
             with open("usblog.txt") as file:
                 if line not in map(str.strip, file):
-                    print("В журнале нет устройства:")
-                    print ('ID производителя:' + str(hex(cfg.idVendor)) + ' ID устройства:' + str(hex(cfg.idProduct)) + '\n')
-                else: print('ID производителя:' + str(hex(cfg.idVendor)) + ' ID устройства:' + str(hex(cfg.idProduct)) + " - OK" + '\n')
+                    print("В журнале нет устройства (No device in the log):")
+                    print ('ID производителя (Vendor ID):' + str(hex(cfg.idVendor)) + ' ID устройства (Product ID):' + str(hex(cfg.idProduct)) + '\n')
+                else: print('ID производителя (Vendor ID):' + str(hex(cfg.idVendor)) + ' ID устройства (Product ID):' + str(hex(cfg.idProduct)) + " - OK" + '\n')
 
-#Меню
+# Menu
 working = True
 while working:
     cmd = input(">>> ")
