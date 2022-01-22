@@ -22,6 +22,7 @@
 ![Docker](https://img.shields.io/badge/docker%20-%230db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white)
 
 * **ft_server** - NGINX server with a database and a Wordpress website in one container.
+* **ft_services** - virtual Kubernetes cluster on Minikube with a set of microservices (NGINX, MariaDB, Wordpress, PHPMyAdmin, InfluxDB, Grafana).
 * **Inception** - a set of microservices (NGINX, MariaDB, Wordpress, Adminer, Redis, FTPS, SphinxDoc) in Docker-Compose.
 
 ## NASM
