@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql-app
+  ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: mysql-port
+      name: mysql-port
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  labels:
+    app: mysql-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-app
+  template:
+    metadata:
+      name: mysql-pod
+      labels:
+        app: mysql-app
+    spec:
+      containers:
+      - name: mysql
+        image: mysql_image
+        imagePullPolicy: Never
+        volumeMounts:
+        - name: mysql-pv-volume #
+          mountPath: /var/lib/mysql
+        ports:
+        - containerPort: 3306
+          name: mysql-port
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - 'pgrep mysqld'
+      volumes:
+      - name: mysql-pv-volume #
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi

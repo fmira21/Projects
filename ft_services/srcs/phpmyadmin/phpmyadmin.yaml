@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpmyadmin-service
+  annotations:
+    metallb.universe.tf/allow-shared-ip: ip-loadbalancer
+spec:
+  selector:
+    app: phpmyadmin-app
+  type: LoadBalancer
+  ports:
+    - port: 5001
+      targetPort: phpmyadmin-port
+      protocol: TCP
+      name: phpmyadmin-port
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpmyadmin-deployment
+  labels:
+    app: phpmyadmin-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpmyadmin-app
+  template:
+    metadata:
+      name: phpmyadmin-pod
+      labels:
+        app: phpmyadmin-app
+    spec:
+      containers:
+      - name: phpmyadmin
+        image: phpmyadmin_image
+        imagePullPolicy: Never
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - 'pgrep php-fpm7 && pgrep nginx'
+          initialDelaySeconds: 7
+          periodSeconds: 3
+        ports:
+        - containerPort: 5001
+          name: phpmyadmin-port

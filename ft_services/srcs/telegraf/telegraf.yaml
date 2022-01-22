@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-deployment
+spec:
+  selector:
+    matchLabels:
+      app: telegraf-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: telegraf-app
+    spec:
+      containers:
+        - name: telegraf
+          image: telegraf_image
+          imagePullPolicy: Never
+          volumeMounts:
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
+          envFrom:
+            - secretRef:
+                name: telegraf-secrets
+      volumes:
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker.sock
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: telegraf-secrets
+type: Opaque
+stringData:
+  INFLUXDB_DB: grafana
+  INFLUXDB_URL: http://influxdb-service:8086
+  INFLUXDB_USER: fmira
+  INFLUXDB_USER_PASSWORD: fmira
